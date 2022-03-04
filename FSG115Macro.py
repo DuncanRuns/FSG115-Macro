@@ -394,6 +394,12 @@ def main():
         print("!!! No json file found, created defaults !!!")
         time.sleep(1)
         closing_sequence()
+    
+    if FSGRunner._get_jar() is None:
+        successful_load = False
+        print("!!! No FSG jar found, please download one and/or place in the same directory !!!")
+        time.sleep(1)
+        closing_sequence()
 
     if successful_load:
         print("Load successful, FSG115Macro is now running.")

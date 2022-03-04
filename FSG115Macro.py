@@ -98,16 +98,23 @@ class FSGRunner:
         for name in os.listdir():
             if FSGRunner.JAR_MATCH_FUNC(name):
                 version = FSGRunner._get_fsg_jar_version(name)
-                if version > max_version:
+                if version is not None and version > max_version:
                     found = name
                     max_version = version
         return found
 
-    def _get_command(self) -> str:
-        return f"{self.java} -jar {FSGRunner._get_jar()} {self.threads} write"
+    def _get_command(self) -> typing.Union[str,None]:
+        jar = FSGRunner._get_jar()
+        if jar is None:
+            return None
+        return f"{self.java} -jar {jar} {self.threads} write"
 
-    def run_filter(self) -> None:
+    def run_filter(self) -> bool:
+        command = self._get_command()
+        if command is None:
+            return False
         os.system(self._get_command())
+        return True
 
     @staticmethod
     def read_file():
@@ -154,6 +161,7 @@ class FSG115Macro:
 
         self._running_finder_lock = threading.Lock()
         self._running_finder = False
+        self._filter_thread: threading.Thread = None
 
         self._running_macro_lock = threading.Lock()
         self._running_macro = False
@@ -175,13 +183,18 @@ class FSG115Macro:
 
             self._ensure_main_menu()
             self._ensure_seed()
+            
+            if self._get_seed() is None:
+                TTS.say("Error")
+                print("!!! No seed available, probably missing jar file !!!")
+            else:
 
-            TTS.say("Seed Found")
-            time.sleep(1)
+                TTS.say("Seed Found")
+                time.sleep(1)
 
-            self._activate_window(self._current_window)
-            time.sleep(0.5)
-            self._create_fsg_world()
+                self._activate_window(self._current_window)
+                time.sleep(0.5)
+                self._create_fsg_world()
 
             self._set_running_macro(False)
 
@@ -258,8 +271,7 @@ class FSG115Macro:
         # Wait for finder thread to finish (this should run if filter_while_playing is true)
         if self._get_running_finder():
             TTS.say("Searching")
-        while self._get_running_finder():
-            time.sleep(0.1)
+            self._filter_thread.join()
 
         # Check if seed exists, if not, run the filter thread
         if self._get_seed() is None:
@@ -267,8 +279,8 @@ class FSG115Macro:
             self._run_filter_thread()
 
         # Wait for finder thread to finish (this should run if filter_while_playing is false)
-        while self._get_running_finder():
-            time.sleep(0.1)
+        if self._get_running_finder():
+            self._filter_thread.join()
 
     @staticmethod
     def _get_window() -> int:
@@ -330,13 +342,16 @@ class FSG115Macro:
     def _run_filter_thread(self):
         if not self._get_running_finder():
             self._set_running_finder(True)
-            threading.Thread(target=self._filter_activity).start()
+            self._filter_thread = threading.Thread(target=self._filter_activity)
+            self._filter_thread.start()
 
     def _filter_activity(self):
-        self._fsg_runner.run_filter()
-        result = self._fsg_runner.read_file()
-        self._set_seed(result[0])
-        TokenLogger.log(result[0], result[1])
+        if self._fsg_runner.run_filter():
+            result = self._fsg_runner.read_file()
+            self._set_seed(result[0])
+            TokenLogger.log(result[0], result[1])
+        else:
+            print("!!! NO FSG JAR FOUND !!!")
         self._set_running_finder(False)
 
 

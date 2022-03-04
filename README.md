@@ -22,7 +22,7 @@ Once created, the file should have various options which you are able to customi
 - `java` - default: `"java"`
     - Specifies the location of java which will be used for the filter. The default "java" means that it will use the system default.
 - `hotkey` - default: `"u"`
-    - Specifies the hotkey used to activate the macro. Can be multiple keys, given that they are seperated by a plus symbol (`+`). Key names can be found on the [global-hotkeys project page](https://pypi.org/project/global-hotkeys/).
+    - Specifies the hotkey used to activate the macro. Can be multiple keys, given that they are seperated by a plus symbol (`+`). [Key names can be found here](https://github.com/DuncanRuns/FSG115-Macro/blob/main/keys.txt).
 - `filterWhilePlaying` - default: `false`
     - Specifies whether the macro will immediately begin searching for a new seed as soon as you enter the world to prevent waiting on the main menu.
 - `useAtum` - default: `false`

@@ -1,6 +1,6 @@
 import os
 
-VERSION = "1.0.1"
+VERSION = "1.0.2"
 print("FSG115Macro v"+VERSION+" by DuncanRuns")
 
 
@@ -16,16 +16,16 @@ def installDependencies():
 
 
 try:
-    import time
+    import win32.win32gui
+    import win32com.client
     import keyboard
     import global_hotkeys
+    import pyttsx3
+    import time
     import json
-    import win32.win32gui
     import re
     import typing
     import threading
-    import win32com.client
-    import pyttsx3
 except:
     installDependencies()
     import time
@@ -217,11 +217,18 @@ class FSG115Macro:
                 time.sleep(self._wait_time)
 
     def _ensure_main_menu(self):
+        latest_log_location = os.path.join(
+            self._minecraft_directory, "logs", "latest.log")
         if FSG115Macro._is_in_minecraft_world():
-            with open(os.path.join(self._minecraft_directory, "logs", "latest.log"), "r") as log_file:
-                log_text = log_file.read()
-                log_file.close()
-            start_line = log_text.split("\n")[-2]
+            has_log_file = os.path.isfile(latest_log_location)
+            start_line: str
+            if not has_log_file:
+                print("!!! No latest.log found. minecraftDir might be incorrect !!!")
+            else:
+                with open(latest_log_location, "r") as log_file:
+                    log_text = log_file.read()
+                    log_file.close()
+                start_line = log_text.split("\n")[-2]
             if self._use_atum:
                 self._run_keys("etttttts")
                 for i in range(self._stop_resets_location):
@@ -229,18 +236,23 @@ class FSG115Macro:
                 self._run_keys("s")
             else:
                 self._run_keys("eTseee")
-            saved_world = False
-            while not saved_world:
-                time.sleep(0.1)
-                with open(os.path.join(self._minecraft_directory, "logs", "latest.log"), "r") as log_file:
-                    log_text = log_file.read()
-                    log_file.close()
-                log_lines = log_text.split("\n")
-                for line in log_lines[-8:]:
-                    if FSG115Macro.SAVE_MATCH_FUNC(line) and line.endswith("worker threads"):
-                        saved_world = True
-                    elif line == start_line:
-                        saved_world = False
+            if has_log_file:
+                saved_world = False
+                while not saved_world:
+                    time.sleep(0.1)
+                    with open(os.path.join(self._minecraft_directory, "logs", "latest.log"), "r") as log_file:
+                        log_text = log_file.read()
+                        log_file.close()
+                    log_lines = log_text.split("\n")
+                    for line in log_lines[-8:]:
+                        if FSG115Macro.SAVE_MATCH_FUNC(line) and line.endswith("worker threads"):
+                            saved_world = True
+                        elif line == start_line:
+                            saved_world = False
+            else:
+                print(
+                    "Waiting 5 seconds instead of ensuring main menu due to not finding latest.log")
+                time.sleep(5)
 
     def _ensure_seed(self):
         # Wait for finder thread to finish (this should run if filter_while_playing is true)
@@ -328,38 +340,68 @@ class FSG115Macro:
         self._set_running_finder(False)
 
 
+def closing_sequence():
+    print("Macro will not run, closing in 10 seconds...")
+    time.sleep(5)
+    print("5...")
+    time.sleep(1)
+    print("4...")
+    time.sleep(1)
+    print("3...")
+    time.sleep(1)
+    print("2...")
+    time.sleep(1)
+    print("1...")
+    time.sleep(1)
+
+
 def main():
     json_settings: dict
+    successful_load: bool
     if os.path.isfile(SETTINGS_LOCATION):
-        with open(SETTINGS_LOCATION, "r") as json_file:
-            json_settings = json.load(json_file)
-            json_file.close()
+        try:
+            with open(SETTINGS_LOCATION, "r") as json_file:
+                json_settings = json.load(json_file)
+                json_file.close()
+                successful_load = True
+        except:
+            print("!!! Failed to read .json file, format is probably wrong !!!")
+            successful_load = False
+            time.sleep(1)
+            closing_sequence()
     else:
+        successful_load = False
         json_settings = DEFAULT_SETTINGS.copy()
         with open(SETTINGS_LOCATION, "w+") as json_file:
             json.dump(DEFAULT_SETTINGS, json_file, indent=4)
             json_file.close()
-            exit()
-
-    fm = FSG115Macro(
-        json_settings.get("threads", DEFAULT_SETTINGS["threads"]),
-        json_settings.get("java", DEFAULT_SETTINGS["java"]),
-        json_settings.get("filterWhilePlaying",
-                          DEFAULT_SETTINGS["filterWhilePlaying"]),
-        json_settings.get("useAtum", DEFAULT_SETTINGS["useAtum"]),
-        json_settings.get("waitTime", DEFAULT_SETTINGS["waitTime"]),
-        json_settings.get("stopResetsLocation",
-                          DEFAULT_SETTINGS["stopResetsLocation"]),
-        json_settings.get("minecraftDir", DEFAULT_SETTINGS["minecraftDir"])
-    )
-
-    global_hotkeys.register_hotkeys([
-        [json_settings.get("hotkey", "u").split("+"), fm.run_macro, None]
-    ])
-    global_hotkeys.start_checking_hotkeys()
-
-    while True:
+        print("!!! No json file found, created defaults !!!")
         time.sleep(1)
+        closing_sequence()
+            
+
+    if successful_load:
+        print("Load successful, FSG115Macro is now running.")
+        fm = FSG115Macro(
+            json_settings.get("threads", DEFAULT_SETTINGS["threads"]),
+            json_settings.get("java", DEFAULT_SETTINGS["java"]),
+            json_settings.get("filterWhilePlaying",
+                              DEFAULT_SETTINGS["filterWhilePlaying"]),
+            json_settings.get("useAtum", DEFAULT_SETTINGS["useAtum"]),
+            json_settings.get("waitTime", DEFAULT_SETTINGS["waitTime"]),
+            json_settings.get("stopResetsLocation",
+                              DEFAULT_SETTINGS["stopResetsLocation"]),
+            json_settings.get("minecraftDir", DEFAULT_SETTINGS["minecraftDir"])
+        )
+
+        global_hotkeys.register_hotkeys([
+            [json_settings.get("hotkey", DEFAULT_SETTINGS["hotkey"]).split(
+                "+"), fm.run_macro, None]
+        ])
+        global_hotkeys.start_checking_hotkeys()
+
+        while True:
+            time.sleep(1)
 
 
 if __name__ == "__main__":

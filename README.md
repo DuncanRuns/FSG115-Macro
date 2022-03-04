@@ -9,6 +9,8 @@ A 1.15 FSG Jar file is required to run this macro. You can download one from htt
 
 The macro is running if the console window is open. Activate the macro by pressing the hotkey specified in the options file (default: `u`). You can activate it from inside a world (with no menus open) or from the title screen.
 
+To stop the macro, close the console window containing it.
+
 ## Options File
 
 The options file `FSG115Macro.json` is a json file created when running the macro if it does not already exist. The macro will close itself immediately if it must create the file.
@@ -31,4 +33,4 @@ Once created, the file should have various options which you are able to customi
     - Specifies the amount of tab presses needed to get to the "Stop Resets & Quit" button provided by atum. This setting does not do anything if `useAtum` = `false`.
 - `minecraftDir` - default: user's default launcher .minecraft
     - Usually ends in `.minecraft`. **Do not specify the saves folder**. 
-    - Specifies the game directory in use. This value is used to determine 
+    - Specifies the game directory in use. This value is used to determine the location of latest.log and lets the macro know when you are done exiting the world.

@@ -5,6 +5,8 @@
 
 Run the provided .exe file in releases or run the source .py file to start the macro. If you do not already have an options file it will create one on the first run.
 
+A 1.15 FSG Jar file is required to run this macro. You can download one from https://github.com/DuncanRuns/FSG115/releases. The .bat file(s) are not required to run the macro. The macro will automatically find the most updated version in the same folder.
+
 The macro is running if the console window is open. Activate the macro by pressing the hotkey specified in the options file (default: `u`). You can activate it from inside a world (with no menus open) or from the title screen.
 
 ## Options File

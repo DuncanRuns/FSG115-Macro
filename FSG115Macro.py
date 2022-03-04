@@ -1,7 +1,8 @@
 import os
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 print("FSG115Macro v"+VERSION+" by DuncanRuns")
+
 
 def installDependencies():
     modules = [
@@ -217,6 +218,10 @@ class FSG115Macro:
 
     def _ensure_main_menu(self):
         if FSG115Macro._is_in_minecraft_world():
+            with open(os.path.join(self._minecraft_directory, "logs", "latest.log"), "r") as log_file:
+                log_text = log_file.read()
+                log_file.close()
+            start_line = log_text.split("\n")[-2]
             if self._use_atum:
                 self._run_keys("etttttts")
                 for i in range(self._stop_resets_location):
@@ -232,8 +237,10 @@ class FSG115Macro:
                     log_file.close()
                 log_lines = log_text.split("\n")
                 for line in log_lines[-8:]:
-                    if not saved_world and FSG115Macro.SAVE_MATCH_FUNC(line) and line.endswith("worker threads"):
+                    if FSG115Macro.SAVE_MATCH_FUNC(line) and line.endswith("worker threads"):
                         saved_world = True
+                    elif line == start_line:
+                        saved_world = False
 
     def _ensure_seed(self):
         # Wait for finder thread to finish (this should run if filter_while_playing is true)

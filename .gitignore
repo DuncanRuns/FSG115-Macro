@@ -125,6 +125,6 @@ dmypy.json
 .pyre/
 
 # FSG115Macro
-**.java
+**.jar
 **.json
 **.txt

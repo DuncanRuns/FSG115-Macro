@@ -34,3 +34,5 @@ Once created, the file should have various options which you are able to customi
 - `minecraftDir` - default: user's default launcher .minecraft
     - Usually ends in `.minecraft`. **Do not specify the saves folder**. 
     - Specifies the game directory in use. This value is used to determine the location of latest.log and lets the macro know when you are done exiting the world.
+
+After changing values in the options file, a restart of the macro is required in order for the changes to take effect.

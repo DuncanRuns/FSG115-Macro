@@ -390,11 +390,11 @@ def main():
             json.dump(DEFAULT_SETTINGS, json_file, indent=4)
             json_file.close()
         print("!!! No json file found, created defaults !!!")
-    
+
     if FSGRunner._get_jar() is None:
         successful_load = False
         print("!!! No FSG jar found, please download one and/or place in the same directory !!!")
-    
+
     if not successful_load:
         time.sleep(1)
         closing_sequence()

@@ -33,6 +33,7 @@ Once created, the file should have various options which you are able to customi
     - Specifies the amount of tab presses needed to get to the "Stop Resets & Quit" button provided by atum. This setting does not do anything if `useAtum` = `false`.
 - `minecraftDir` - default: user's default launcher .minecraft
     - Usually ends in `.minecraft`. **Do not specify the saves folder**. 
+    - The format must use either double backslash `\\` or forwards slashes `/`. **No single backslashes**.
     - Specifies the game directory in use. This value is used to determine the location of latest.log and lets the macro know when you are done exiting the world.
 
 After changing values in the options file, a restart of the macro is required in order for the changes to take effect.

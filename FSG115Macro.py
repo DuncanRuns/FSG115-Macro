@@ -383,8 +383,6 @@ def main():
         except:
             print("!!! Failed to read .json file, format is probably wrong !!!")
             successful_load = False
-            time.sleep(1)
-            closing_sequence()
     else:
         successful_load = False
         json_settings = DEFAULT_SETTINGS.copy()
@@ -392,16 +390,16 @@ def main():
             json.dump(DEFAULT_SETTINGS, json_file, indent=4)
             json_file.close()
         print("!!! No json file found, created defaults !!!")
-        time.sleep(1)
-        closing_sequence()
     
     if FSGRunner._get_jar() is None:
         successful_load = False
         print("!!! No FSG jar found, please download one and/or place in the same directory !!!")
+    
+    if not successful_load:
         time.sleep(1)
         closing_sequence()
 
-    if successful_load:
+    else:
         print("Load successful, FSG115Macro is now running.")
         fm = FSG115Macro(
             json_settings.get("threads", DEFAULT_SETTINGS["threads"]),

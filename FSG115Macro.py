@@ -103,7 +103,7 @@ class FSGRunner:
                     max_version = version
         return found
 
-    def _get_command(self) -> typing.Union[str,None]:
+    def _get_command(self) -> typing.Union[str, None]:
         jar = FSGRunner._get_jar()
         if jar is None:
             return None
@@ -183,7 +183,7 @@ class FSG115Macro:
 
             self._ensure_main_menu()
             self._ensure_seed()
-            
+
             if self._get_seed() is None:
                 TTS.say("Error")
                 print("!!! No seed available, probably missing jar file !!!")
@@ -342,7 +342,8 @@ class FSG115Macro:
     def _run_filter_thread(self):
         if not self._get_running_finder():
             self._set_running_finder(True)
-            self._filter_thread = threading.Thread(target=self._filter_activity)
+            self._filter_thread = threading.Thread(
+                target=self._filter_activity)
             self._filter_thread.start()
 
     def _filter_activity(self):
@@ -393,7 +394,6 @@ def main():
         print("!!! No json file found, created defaults !!!")
         time.sleep(1)
         closing_sequence()
-            
 
     if successful_load:
         print("Load successful, FSG115Macro is now running.")

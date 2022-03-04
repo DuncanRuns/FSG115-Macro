@@ -42,7 +42,7 @@ After changing values in the options file, a restart of the macro is required in
 
 ### Q: It crashed bro?
 
-A: Please ensure you have the latest version. If you are on the latest version, you may find your error below, if not, please open a ticket or message me on discord (Duncan#1627)
+A: Please ensure you have the latest version. If you are on the latest version, you may find your error below, if not, please open an issue or message me on discord (Duncan#1627)
 
 ### Error: `No latest.log found. minecraftDir might be incorrect`
 
@@ -80,4 +80,4 @@ A: This can happen because speedrun mods add various buttons to the options menu
 
 ### Q: Macro is stuck and won't search for a new seed!
 
-A: This could happen for various reasons. One known one is usage of the mod "kypton", please remove krypton from your mods folder if this happens. If it continues to happen after removing krypton, please open a ticket or contact me on discord (Duncan#1627).
+A: This could happen for various reasons. One known one is usage of the mod "kypton", please remove krypton from your mods folder if this happens. If it continues to happen after removing krypton, please open an issue or contact me on discord (Duncan#1627).

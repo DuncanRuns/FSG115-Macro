@@ -84,4 +84,4 @@ A: This could happen for various reasons. One known one is usage of the mod "kyp
 
 ### Q: Why is the exe file so big?
 
-A: Because this is written in python, an exe to run python code must contain python itself and all modules used in the project. Some of the modules tend to be quite big, and to take only parts of the modules that are needed would be a very complex problem.
+A: Because this is written in python, an exe to run python code must contain python itself and all modules used in the project. Some of the modules tend to be quite big, and to take only parts of the modules that are needed would be a very complex problem without copying the module and doing hundreds of hours of working figuring out what is needed.

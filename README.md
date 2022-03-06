@@ -81,3 +81,7 @@ A: This can happen because speedrun mods add various buttons to the options menu
 ### Q: Macro is stuck and won't search for a new seed!
 
 A: This could happen for various reasons. One known one is usage of the mod "kypton", please remove krypton from your mods folder if this happens. If it continues to happen after removing krypton, please open an issue or contact me on discord (Duncan#1627).
+
+### Q: Why is the exe file so big?
+
+A: Because this is written in python, an exe to run python code must contain python itself and all modules used in the project. Some of the modules tend to be quite big, and to take only parts of the modules that are needed would be a very complex problem.

@@ -1,7 +1,7 @@
 import os
 
-VERSION = "1.0.2"
-print("FSG115Macro v"+VERSION+" by DuncanRuns")
+VERSION = "1.0.3"
+print("FSG115Macro v" + VERSION + " by DuncanRuns")
 
 
 def installDependencies():
@@ -12,7 +12,7 @@ def installDependencies():
         "pyttsx3"
     ]
     for module in modules:
-        os.system("python -m pip install "+module)
+        os.system("python -m pip install " + module)
 
 
 try:
@@ -64,7 +64,7 @@ class TTS:
 
     @staticmethod
     def _say_activity(message: str):
-        print("[TTS] "+message)
+        print("[TTS] " + message)
         if TTS.ENGINE._inLoop:
             TTS.ENGINE.endLoop()
         TTS.ENGINE.say(message)
@@ -204,7 +204,7 @@ class FSG115Macro:
     def _create_fsg_world(self):
         keys: str
         if self._use_atum:
-            keys = "eeeTStapttsTs"
+            keys = "eeeTStapTTsTs"
         else:
             keys = "eeetsttttwstapttwstttpTTws"
         self._run_keys(keys)
@@ -238,7 +238,7 @@ class FSG115Macro:
             if not has_log_file:
                 print("!!! No latest.log found. minecraftDir might be incorrect !!!")
             else:
-                with open(latest_log_location, "r") as log_file:
+                with open(latest_log_location, "r", encoding="utf8") as log_file:
                     log_text = log_file.read()
                     log_file.close()
                 start_line = log_text.split("\n")[-2]
@@ -253,7 +253,7 @@ class FSG115Macro:
                 saved_world = False
                 while not saved_world:
                     time.sleep(0.1)
-                    with open(os.path.join(self._minecraft_directory, "logs", "latest.log"), "r") as log_file:
+                    with open(os.path.join(self._minecraft_directory, "logs", "latest.log"), "r", encoding="utf8") as log_file:
                         log_text = log_file.read()
                         log_file.close()
                     log_lines = log_text.split("\n")

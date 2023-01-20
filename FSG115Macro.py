@@ -1,6 +1,6 @@
 import os
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 print("FSG115Macro v" + VERSION + " by DuncanRuns")
 
 
@@ -26,7 +26,7 @@ try:
     import re
     import typing
     import threading
-except:
+except Exception:
     installDependencies()
     import time
     import keyboard
@@ -88,7 +88,7 @@ class FSGRunner:
             vStr = name[7:name.index(".jar")]
             args = vStr.split(".")
             return int(args[0]) * 1000000 + int(args[1]) * 1000 + int(args[2])
-        except:
+        except Exception:
             return None
 
     @staticmethod
@@ -380,7 +380,7 @@ def main():
                 json_settings = json.load(json_file)
                 json_file.close()
                 successful_load = True
-        except:
+        except Exception:
             print("!!! Failed to read .json file, format is probably wrong !!!")
             successful_load = False
     else:
